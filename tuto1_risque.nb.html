@@ -9,6 +9,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
+<meta name="author" content="Laurent Rouvière" />
 
 
 <title>Tuto1 : Estimation du risque</title>
@@ -2891,6 +2892,7 @@ div.tocify {
 
 
 <h1 class="title toc-ignore">Tuto1 : Estimation du risque</h1>
+<h4 class="author">Laurent Rouvière</h4>
 
 </div>
 
@@ -2898,9 +2900,9 @@ div.tocify {
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSh0aWR5dmVyc2UpXG50aGVtZV9zZXQodGhlbWVfY2xhc3NpYyhiYXNlX3NpemU9MTIpKVxuYGBgIn0= -->
-<pre class="r"><code>library(tidyverse)
-theme_set(theme_classic(base_size=12))</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxubGlicmFyeSh0aWR5dmVyc2UpXG50aGVtZV9zZXQodGhlbWVfY2xhc3NpYyhiYXNlX3NpemU9MTIpKVxuYGBgXG5gYGAifQ== -->
+<p><code>r</code>r library(tidyverse) theme_set(theme_classic(base_size=12))</p>
+<pre><code></code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -2909,25 +2911,9 @@ theme_set(theme_classic(base_size=12))</code></pre>
 <p>On cherche à expliquer une variable binaire <span class="math inline">\(Y\)</span> par deux variables quantitatives <span class="math inline">\(X_1\)</span> et <span class="math inline">\(X_2\)</span> à l’aide du jeu de données suivant</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubiA8LSAyMDAwXG5zZXQuc2VlZCgxMjM0NSlcblgxIDwtIHJ1bmlmKG4pXG5zZXQuc2VlZCg1Njc4KVxuWDIgPC0gcnVuaWYobilcbnNldC5zZWVkKDkwMTIpXG5SMSA8LSBYMTw9MC4yNVxuUjIgPC0gKFgxPjAuMjUgJiBYMj49MC43NSlcblIzIDwtIChYMT4wLjI1ICYgWDI8MC43NSlcblkgPC0gcmVwKDAsbilcbllbUjFdIDwtIHJiaW5vbShzdW0oUjEpLDEsMC4yNSlcbllbUjJdIDwtIHJiaW5vbShzdW0oUjIpLDEsMC4yNSlcbllbUjNdIDwtIHJiaW5vbShzdW0oUjMpLDEsMC43NSlcbmRvbm5lZXMgPC0gZGF0YS5mcmFtZShYMSxYMixZKVxuZG9ubmVlcyRZIDwtIGFzLmZhY3Rvcihkb25uZWVzJFkpXG5pbmRhcHAgPC0gMToxNTAwXG5kYXBwIDwtIGRvbm5lZXNbaW5kYXBwLF1cbmR0ZXN0IDwtIGRvbm5lZXNbLWluZGFwcCxdXG5gYGAifQ== -->
-<pre class="r"><code>n &lt;- 2000
-set.seed(12345)
-X1 &lt;- runif(n)
-set.seed(5678)
-X2 &lt;- runif(n)
-set.seed(9012)
-R1 &lt;- X1&lt;=0.25
-R2 &lt;- (X1&gt;0.25 &amp; X2&gt;=0.75)
-R3 &lt;- (X1&gt;0.25 &amp; X2&lt;0.75)
-Y &lt;- rep(0,n)
-Y[R1] &lt;- rbinom(sum(R1),1,0.25)
-Y[R2] &lt;- rbinom(sum(R2),1,0.25)
-Y[R3] &lt;- rbinom(sum(R3),1,0.75)
-donnees &lt;- data.frame(X1,X2,Y)
-donnees$Y &lt;- as.factor(donnees$Y)
-indapp &lt;- 1:1500
-dapp &lt;- donnees[indapp,]
-dtest &lt;- donnees[-indapp,]</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxubiA8LSAyMDAwXG5zZXQuc2VlZCgxMjM0NSlcblgxIDwtIHJ1bmlmKG4pXG5zZXQuc2VlZCg1Njc4KVxuWDIgPC0gcnVuaWYobilcbnNldC5zZWVkKDkwMTIpXG5SMSA8LSBYMTw9MC4yNVxuUjIgPC0gKFgxPjAuMjUgJiBYMj49MC43NSlcblIzIDwtIChYMT4wLjI1ICYgWDI8MC43NSlcblkgPC0gcmVwKDAsbilcbllbUjFdIDwtIHJiaW5vbShzdW0oUjEpLDEsMC4yNSlcbllbUjJdIDwtIHJiaW5vbShzdW0oUjIpLDEsMC4yNSlcbllbUjNdIDwtIHJiaW5vbShzdW0oUjMpLDEsMC43NSlcbmRvbm5lZXMgPC0gZGF0YS5mcmFtZShYMSxYMixZKVxuZG9ubmVlcyRZIDwtIGFzLmZhY3Rvcihkb25uZWVzJFkpXG5pbmRhcHAgPC0gMToxNTAwXG5kYXBwIDwtIGRvbm5lZXNbaW5kYXBwLF1cbmR0ZXN0IDwtIGRvbm5lZXNbLWluZGFwcCxdXG5gYGBcbmBgYCJ9 -->
+<p><code>r</code>r n &lt;- 2000 set.seed(12345) X1 &lt;- runif(n) set.seed(5678) X2 &lt;- runif(n) set.seed(9012) R1 &lt;- X1&lt;=0.25 R2 &lt;- (X1&gt;0.25 &amp; X2&gt;=0.75) R3 &lt;- (X1&gt;0.25 &amp; X2&lt;0.75) Y &lt;- rep(0,n) Y[R1] &lt;- rbinom(sum(R1),1,0.25) Y[R2] &lt;- rbinom(sum(R2),1,0.25) Y[R3] &lt;- rbinom(sum(R3),1,0.75) donnees &lt;- data.frame(X1,X2,Y) donnees<span class="math inline">\(Y &lt;- as.factor(donnees\)</span>Y) indapp &lt;- 1:1500 dapp &lt;- donnees[indapp,] dtest &lt;- donnees[-indapp,]</p>
+<pre><code></code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -2944,8 +2930,9 @@ dtest &lt;- donnees[-indapp,]</code></pre>
 </ol>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ2dwbG90KGRvbm5lZXMpK2Flcyh4PVgxLHk9WDIsY29sb3I9WSkrZ2VvbV9wb2ludCgpXG5gYGAifQ== -->
-<pre class="r"><code>ggplot(donnees)+aes(x=X1,y=X2,color=Y)+geom_point()</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuZ2dwbG90KGRvbm5lZXMpK2Flcyh4PVgxLHk9WDIsY29sb3I9WSkrZ2VvbV9wb2ludCgpXG5gYGBcbmBgYCJ9 -->
+<p><code>r</code>r ggplot(donnees)+aes(x=X1,y=X2,color=Y)+geom_point()</p>
+<pre><code></code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -2954,10 +2941,9 @@ dtest &lt;- donnees[-indapp,]</code></pre>
 </ol>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShjbGFzcylcbmtubjMgPC0ga25uKGRhcHBbLDE6Ml0sZHRlc3RbLDE6Ml0sY2w9ZGFwcCRZLGs9Mylcbm1lYW4oa25uMyE9ZHRlc3QkWSlcbmBgYCJ9 -->
-<pre class="r"><code>library(class)
-knn3 &lt;- knn(dapp[,1:2],dtest[,1:2],cl=dapp$Y,k=3)
-mean(knn3!=dtest$Y)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxubGlicmFyeShjbGFzcylcbmtubjMgPC0ga25uKGRhcHBbLDE6Ml0sZHRlc3RbLDE6Ml0sY2w9ZGFwcCRZLGs9Mylcbm1lYW4oa25uMyE9ZHRlc3QkWSlcbmBgYFxuYGBgIn0= -->
+<p><code>r</code>r library(class) knn3 &lt;- knn(dapp[,1:2],dtest[,1:2],cl=dapp<span class="math inline">\(Y,k=3) mean(knn3!=dtest\)</span>Y)</p>
+<pre><code></code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -2966,30 +2952,27 @@ mean(knn3!=dtest$Y)</code></pre>
 </ol>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxua19jYW5kIDwtIHNlcSgxLDEwMCxieT0yKVxuYGBgIn0= -->
-<pre class="r"><code>k_cand &lt;- seq(1,100,by=2)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxua19jYW5kIDwtIHNlcSgxLDEwMCxieT0yKVxuYGBgXG5gYGAifQ== -->
+<p><code>r</code>r k_cand &lt;- seq(1,100,by=2)</p>
+<pre><code></code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p>Calculer, pour chaque valeur de <span class="math inline">\(k\)</span>, l’erreur de classification avec la même technique que dans la question précédente. Quelle valeur de <span class="math inline">\(k\)</span> choisissez vous ?</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZXJyZXVyIDwtIHJlcCgwLGxlbmd0aChrX2NhbmQpKVxuY29tcHQgPC0gMVxuZm9yIChrIGluIGtfY2FuZCl7XG4gIGtubl9wcmV2IDwtIGtubihkYXBwWywxOjJdLGR0ZXN0WywxOjJdLGNsPWRhcHAkWSxrPWspXG4gIGVycmV1cltjb21wdF0gPC0gbWVhbihrbm5fcHJldiE9ZHRlc3QkWSlcbiAgY29tcHQgPC0gY29tcHQrMVxufVxuYGBgIn0= -->
-<pre class="r"><code>erreur &lt;- rep(0,length(k_cand))
-compt &lt;- 1
-for (k in k_cand){
-  knn_prev &lt;- knn(dapp[,1:2],dtest[,1:2],cl=dapp$Y,k=k)
-  erreur[compt] &lt;- mean(knn_prev!=dtest$Y)
-  compt &lt;- compt+1
-}</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuZXJyZXVyIDwtIHJlcCgwLGxlbmd0aChrX2NhbmQpKVxuY29tcHQgPC0gMVxuZm9yIChrIGluIGtfY2FuZCl7XG4gIGtubl9wcmV2IDwtIGtubihkYXBwWywxOjJdLGR0ZXN0WywxOjJdLGNsPWRhcHAkWSxrPWspXG4gIGVycmV1cltjb21wdF0gPC0gbWVhbihrbm5fcHJldiE9ZHRlc3QkWSlcbiAgY29tcHQgPC0gY29tcHQrMVxufVxuYGBgXG5gYGAifQ== -->
+<p><code>r</code>r erreur &lt;- rep(0,length(k_cand)) compt &lt;- 1 for (k in k_cand){ knn_prev &lt;- knn(dapp[,1:2],dtest[,1:2],cl=dapp<span class="math inline">\(Y,k=k)  erreur[compt] &lt;- mean(knn_prev!=dtest\)</span>Y) compt &lt;- compt+1 }</p>
+<pre><code></code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p>On choisit la valeur de <span class="math inline">\(k\)</span> pour laquelle l’erreur est la plus petite :</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxua19jYW5kW3doaWNoLm1pbihlcnJldXIpXVxuYGBgIn0= -->
-<pre class="r"><code>k_cand[which.min(erreur)]</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxua19jYW5kW3doaWNoLm1pbihlcnJldXIpXVxuYGBgXG5gYGAifQ== -->
+<p><code>r</code>r k_cand[which.min(erreur)]</p>
+<pre><code></code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -2998,42 +2981,27 @@ for (k in k_cand){
 </ol>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShjYXJldClcbksgPC0gMTBcbmtmb2xkcyA8LSBjcmVhdGVGb2xkcygxOm5yb3coZG9ubmVlcyksaz1LKVxuYGBgIn0= -->
-<pre class="r"><code>library(caret)
-K &lt;- 10
-kfolds &lt;- createFolds(1:nrow(donnees),k=K)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxubGlicmFyeShjYXJldClcbksgPC0gMTBcbmtmb2xkcyA8LSBjcmVhdGVGb2xkcygxOm5yb3coZG9ubmVlcyksaz1LKVxuYGBgXG5gYGAifQ== -->
+<p><code>r</code>r library(caret) K &lt;- 10 kfolds &lt;- createFolds(1:nrow(donnees),k=K)</p>
+<pre><code></code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p>On créé ensuite une fonction qui permet de calculer l’erreur pour une valeur de <span class="math inline">\(k\)</span> donnée :</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZXJyX2N2IDwtIGZ1bmN0aW9uKGspe1xuICBlcnJldXJfYmxvYyA8LSByZXAoMCxLKVxuICBmb3IgKGogaW4gMTpLKXtcbiAgICB0cmFpbiA8LSBkb25uZWVzWy1rZm9sZHNbW2pdXSxdXG4gICAgdGVzdCA8LSBkb25uZWVzW2tmb2xkc1tbal1dLF1cbiAgICBwcmV2IDwtIGtubih0cmFpblssMToyXSx0ZXN0WywxOjJdLGNsPXRyYWluJFksaz1rKVxuICAgIGVycmV1cl9ibG9jW2pdIDwtIG1lYW4ocHJldiE9dGVzdCRZKVxuICB9XG4gIHJldHVybihtZWFuKGVycmV1cl9ibG9jKSlcbn1cblxuYGBgIn0= -->
-<pre class="r"><code>err_cv &lt;- function(k){
-  erreur_bloc &lt;- rep(0,K)
-  for (j in 1:K){
-    train &lt;- donnees[-kfolds[[j]],]
-    test &lt;- donnees[kfolds[[j]],]
-    prev &lt;- knn(train[,1:2],test[,1:2],cl=train$Y,k=k)
-    erreur_bloc[j] &lt;- mean(prev!=test$Y)
-  }
-  return(mean(erreur_bloc))
-}
-</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuZXJyX2N2IDwtIGZ1bmN0aW9uKGspe1xuICBlcnJldXJfYmxvYyA8LSByZXAoMCxLKVxuICBmb3IgKGogaW4gMTpLKXtcbiAgICB0cmFpbiA8LSBkb25uZWVzWy1rZm9sZHNbW2pdXSxdXG4gICAgdGVzdCA8LSBkb25uZWVzW2tmb2xkc1tbal1dLF1cbiAgICBwcmV2IDwtIGtubih0cmFpblssMToyXSx0ZXN0WywxOjJdLGNsPXRyYWluJFksaz1rKVxuICAgIGVycmV1cl9ibG9jW2pdIDwtIG1lYW4ocHJldiE9dGVzdCRZKVxuICB9XG4gIHJldHVybihtZWFuKGVycmV1cl9ibG9jKSlcbn1cblxuYGBgXG5gYGAifQ== -->
+<p><code>r</code>r err_cv &lt;- function(k){ erreur_bloc &lt;- rep(0,K) for (j in 1:K){ train &lt;- donnees[-kfolds[[j]],] test &lt;- donnees[kfolds[[j]],] prev &lt;- knn(train[,1:2],test[,1:2],cl=train<span class="math inline">\(Y,k=k)  erreur_bloc[j] &lt;- mean(prev!=test\)</span>Y) } return(mean(erreur_bloc)) }</p>
+<pre><code></code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p>Calculer, pour chaque valeur de <span class="math inline">\(k\)</span>, l’erreur de classification avec cette technique de validation croisée. Quelle valeur de <span class="math inline">\(k\)</span> choisissez-vous ?</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZXJyZXVyX2N2IDwtIHJlcCgwLGxlbmd0aChrX2NhbmQpKVxuY29tcHQgPC0gMVxuZm9yIChrIGluIGtfY2FuZCl7XG4gIGVycmV1cl9jdltjb21wdF0gPC0gZXJyX2N2KGspXG4gIGNvbXB0IDwtIGNvbXB0KzFcbn1cbmtfY2FuZFt3aGljaC5taW4oZXJyZXVyX2N2KV1cbmBgYCJ9 -->
-<pre class="r"><code>erreur_cv &lt;- rep(0,length(k_cand))
-compt &lt;- 1
-for (k in k_cand){
-  erreur_cv[compt] &lt;- err_cv(k)
-  compt &lt;- compt+1
-}
-k_cand[which.min(erreur_cv)]</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuZXJyZXVyX2N2IDwtIHJlcCgwLGxlbmd0aChrX2NhbmQpKVxuY29tcHQgPC0gMVxuZm9yIChrIGluIGtfY2FuZCl7XG4gIGVycmV1cl9jdltjb21wdF0gPC0gZXJyX2N2KGspXG4gIGNvbXB0IDwtIGNvbXB0KzFcbn1cbmtfY2FuZFt3aGljaC5taW4oZXJyZXVyX2N2KV1cbmBgYFxuYGBgIn0= -->
+<p><code>r</code>r erreur_cv &lt;- rep(0,length(k_cand)) compt &lt;- 1 for (k in k_cand){ erreur_cv[compt] &lt;- err_cv(k) compt &lt;- compt+1 } k_cand[which.min(erreur_cv)]</p>
+<pre><code></code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -3043,7 +3011,7 @@ k_cand[which.min(erreur_cv)]</code></pre>
 <!-- rnb-text-end -->
 </div>
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAnVHV0bzEgOiBFc3RpbWF0aW9uIGR1IHJpc3F1ZScKb3V0cHV0OgogIGh0bWxfbm90ZWJvb2s6CiMgICAgY3NzOiB+L0Ryb3Bib3gvRklDSElFUlNfU1RZTEUvc3R5bGVzLmNzcwogICAgdG9jOiB5ZXMKICAgIHRvY19mbG9hdDogeWVzCiAgICB0aGVtZTogImNlcnVsZWFuIgojICAgIHRoZW1lOiAiY2F5bWFuIgogIGh0bWxfZG9jdW1lbnQ6CiAgICBjc3M6IH4vRHJvcGJveC9GSUNISUVSU19TVFlMRS9zdHlsZXMuY3NzCiAgICBkZl9wcmludDogcGFnZWQKICAgIHRvYzogeWVzCi0tLQoKYGBge3IgbWVzc2FnZT1GQUxTRSwgd2FybmluZz1GQUxTRX0KbGlicmFyeSh0aWR5dmVyc2UpCnRoZW1lX3NldCh0aGVtZV9jbGFzc2ljKGJhc2Vfc2l6ZT0xMikpCmBgYAoKCiMjIEV4ZXJjaWNlIDEKCk9uIGNoZXJjaGUgw6AgZXhwbGlxdWVyIHVuZSB2YXJpYWJsZSBiaW5haXJlICRZJCBwYXIgZGV1eCB2YXJpYWJsZXMgcXVhbnRpdGF0aXZlcyAkWF8xJCBldCAkWF8yJCDDoCBsJ2FpZGUgZHUgamV1IGRlIGRvbm7DqWVzIHN1aXZhbnQKCmBgYHtyfQpuIDwtIDIwMDAKc2V0LnNlZWQoMTIzNDUpClgxIDwtIHJ1bmlmKG4pCnNldC5zZWVkKDU2NzgpClgyIDwtIHJ1bmlmKG4pCnNldC5zZWVkKDkwMTIpClIxIDwtIFgxPD0wLjI1ClIyIDwtIChYMT4wLjI1ICYgWDI+PTAuNzUpClIzIDwtIChYMT4wLjI1ICYgWDI8MC43NSkKWSA8LSByZXAoMCxuKQpZW1IxXSA8LSByYmlub20oc3VtKFIxKSwxLDAuMjUpCllbUjJdIDwtIHJiaW5vbShzdW0oUjIpLDEsMC4yNSkKWVtSM10gPC0gcmJpbm9tKHN1bShSMyksMSwwLjc1KQpkb25uZWVzIDwtIGRhdGEuZnJhbWUoWDEsWDIsWSkKZG9ubmVlcyRZIDwtIGFzLmZhY3Rvcihkb25uZWVzJFkpCmluZGFwcCA8LSAxOjE1MDAKZGFwcCA8LSBkb25uZWVzW2luZGFwcCxdCmR0ZXN0IDwtIGRvbm5lZXNbLWluZGFwcCxdCmBgYAoKT24gcmVtYXJxdWUgcXVlICRYJCBzdWl0IHVuZSBsb2kgdW5pZm9ybWUgc3VyIGxlIGNhcnLDqSAkWzAsMV1eMiQuICRZfFg9eCQgc3VpdCB1bmUgbG9pIGRlIEJlcm5vdWxsaSBkZSBwYXJhbcOodHJlCiAgKiAwLjI1IHNpICR4XzFcbGVxIDAuMjUkIG91ICR4XzE+MC4yNSQgZXQgJHhfMlxnZXEgMC43NSQuCiAgKiAwLjc1IHNpbm9uLgogIApPbiBkw6lkdWl0IHF1ZSBsYSByw6hnbGUgZGUgQmF5ZXMgZXN0IGRvbm7DqWUgcGFyIAoKJCRnXlxzdGFyKHgpPVxsZWZ0XHsKXGJlZ2lue2FycmF5fXtsbH0KMCAmIFx0ZXh0e3NpIH14XzFcbGVxIDAuMjUgXHRleHR7IG91IH0oeF8xPjAuMjVcdGV4dHsgZXQgfXhfMlxnZXEgMC43NSlcXAoxICYgXHRleHR7c2lub24ufQpcZW5ke2FycmF5fVxyaWdodC4kJAoKTCdlcnJldXIgZGUgQmF5ZXMgdmF1dCAkTF5cc3Rhcj0wLjI1JC4KCjEuIFJlcHLDqXNlbnRlciBsZSBudWFnZSBkZSBwb2ludHMgJFhfMiQgZW4gZm9uY3Rpb24gZGUgJFhfMSQgZW4gdXRpbGlzYW50IHVuZSBjb3VsZXVyIGRpZmbDqXJlbnRlIHNlbG9uICRZJC4KCmBgYHtyfQpnZ3Bsb3QoZG9ubmVlcykrYWVzKHg9WDEseT1YMixjb2xvcj1ZKStnZW9tX3BvaW50KCkKYGBgCgoyLiBDaGFyZ2VyIGxlIHBhY2thZ2UgKmNsYXNzKiBldCBhanVzdGVyIGxhIHLDqGdsZSBkZXMgMyBwbHVzIHByb2NoZXMgdm9pc2lucyBzdXIgbGVzIGRvbm7DqWVzIGQnYXBwcmVudGlzc2FnZSAoZm9uY3Rpb24gKiprbm4qKikuIEVzdGltZXIgbGEgcHJvYmFiaWxpdMOpIGQnZXJyZXVyIGRlIGNldHRlIHLDqGdsZSBlbiB1dGlsaXNhbnQgbCfDqWNoYW50aWxsb24gdGVzdC4KCmBgYHtyfQpsaWJyYXJ5KGNsYXNzKQprbm4zIDwtIGtubihkYXBwWywxOjJdLGR0ZXN0WywxOjJdLGNsPWRhcHAkWSxrPTMpCm1lYW4oa25uMyE9ZHRlc3QkWSkKYGBgCgozLiBPbiBzb3VoYWl0ZSBtYWludGVuYW50IGNob2lzaXIgJGskIGRhbnMgbGUgdmVjdGV1cgpgYGB7cn0Ka19jYW5kIDwtIHNlcSgxLDEwMCxieT0yKQpgYGAKQ2FsY3VsZXIsIHBvdXIgY2hhcXVlIHZhbGV1ciBkZSAkayQsIGwnZXJyZXVyIGRlIGNsYXNzaWZpY2F0aW9uIGF2ZWMgbGEgbcOqbWUgdGVjaG5pcXVlIHF1ZSBkYW5zIGxhIHF1ZXN0aW9uIHByw6ljw6lkZW50ZS4gUXVlbGxlIHZhbGV1ciBkZSAkayQgY2hvaXNpc3NleiB2b3VzID8KCmBgYHtyfQplcnJldXIgPC0gcmVwKDAsbGVuZ3RoKGtfY2FuZCkpCmNvbXB0IDwtIDEKZm9yIChrIGluIGtfY2FuZCl7CiAga25uX3ByZXYgPC0ga25uKGRhcHBbLDE6Ml0sZHRlc3RbLDE6Ml0sY2w9ZGFwcCRZLGs9aykKICBlcnJldXJbY29tcHRdIDwtIG1lYW4oa25uX3ByZXYhPWR0ZXN0JFkpCiAgY29tcHQgPC0gY29tcHQrMQp9CmBgYApPbiBjaG9pc2l0IGxhIHZhbGV1ciBkZSAkayQgcG91ciBsYXF1ZWxsZSBsJ2VycmV1ciBlc3QgbGEgcGx1cyBwZXRpdGUgOgpgYGB7cn0Ka19jYW5kW3doaWNoLm1pbihlcnJldXIpXQpgYGAKCgo0LiBPbiBzb3VoYWl0ZSBtYWludGVuYW50IGNhbGN1bGVyIGwnZXJyZXVyIGRlIGxhIHLDqGdsZSBkZXMgMyBwbHVzIHByb2NoZXMgdm9pc2lucyBhdmVjIGRlIGxhIHZhbGlkYXRpb24gY3JvaXPDqWUgMTAgYmxvY3MuIENldHRlIG3DqXRob2RlIG7DqWNlc3NpdGUgZGUgcGFydGl0aW9ubmVyIGwnw6ljaGFudGlsbG9uIGVuIDEwIHBhcnRpZXMsIG9uIHBldXQgdXRpbGlzZXIgbGEgZm9uY3Rpb24gKipjcmVhdGVGb2xkcyoqIGR1IHBhY2thZ2UgKipjYXJldCoqLgoKYGBge3IgbWVzc2FnZT1GQUxTRSwgd2FybmluZz1GQUxTRX0KbGlicmFyeShjYXJldCkKSyA8LSAxMAprZm9sZHMgPC0gY3JlYXRlRm9sZHMoMTpucm93KGRvbm5lZXMpLGs9SykKYGBgCgpPbiBjcsOpw6kgZW5zdWl0ZSB1bmUgZm9uY3Rpb24gcXVpIHBlcm1ldCBkZSBjYWxjdWxlciBsJ2VycmV1ciBwb3VyIHVuZSB2YWxldXIgZGUgJGskIGRvbm7DqWUgOgoKYGBge3J9CmVycl9jdiA8LSBmdW5jdGlvbihrKXsKICBlcnJldXJfYmxvYyA8LSByZXAoMCxLKQogIGZvciAoaiBpbiAxOkspewogICAgdHJhaW4gPC0gZG9ubmVlc1sta2ZvbGRzW1tqXV0sXQogICAgdGVzdCA8LSBkb25uZWVzW2tmb2xkc1tbal1dLF0KICAgIHByZXYgPC0ga25uKHRyYWluWywxOjJdLHRlc3RbLDE6Ml0sY2w9dHJhaW4kWSxrPWspCiAgICBlcnJldXJfYmxvY1tqXSA8LSBtZWFuKHByZXYhPXRlc3QkWSkKICB9CiAgcmV0dXJuKG1lYW4oZXJyZXVyX2Jsb2MpKQp9CgpgYGAKCkNhbGN1bGVyLCBwb3VyIGNoYXF1ZSB2YWxldXIgZGUgJGskLCBsJ2VycmV1ciBkZSBjbGFzc2lmaWNhdGlvbiBhdmVjIGNldHRlIHRlY2huaXF1ZSBkZSB2YWxpZGF0aW9uIGNyb2lzw6llLiBRdWVsbGUgdmFsZXVyIGRlICRrJCBjaG9pc2lzc2V6LXZvdXMgPwoKYGBge3J9CmVycmV1cl9jdiA8LSByZXAoMCxsZW5ndGgoa19jYW5kKSkKY29tcHQgPC0gMQpmb3IgKGsgaW4ga19jYW5kKXsKICBlcnJldXJfY3ZbY29tcHRdIDwtIGVycl9jdihrKQogIGNvbXB0IDwtIGNvbXB0KzEKfQprX2NhbmRbd2hpY2gubWluKGVycmV1cl9jdildCmBgYAoKIyMgRXhlcmNpY2UgMgoK</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAnVHV0bzEgOiBFc3RpbWF0aW9uIGR1IHJpc3F1ZScKYXV0aG9yOiAnTGF1cmVudCBSb3V2acOocmUnCm91dHB1dDoKICBodG1sX25vdGVib29rOgojICAgIGNzczogfi9Ecm9wYm94L0ZJQ0hJRVJTX1NUWUxFL3N0eWxlcy5jc3MKICAgIHRvYzogeWVzCiAgICB0b2NfZmxvYXQ6IHllcwogICAgdGhlbWU6ICJjZXJ1bGVhbiIKIyAgICB0aGVtZTogImNheW1hbiIKICBodG1sX2RvY3VtZW50OgogICAgY3NzOiB+L0Ryb3Bib3gvRklDSElFUlNfU1RZTEUvc3R5bGVzLmNzcwogICAgZGZfcHJpbnQ6IHBhZ2VkCiAgICB0b2M6IHllcwotLS0KCmBgYHtyIG1lc3NhZ2U9RkFMU0UsIHdhcm5pbmc9RkFMU0V9CmxpYnJhcnkodGlkeXZlcnNlKQp0aGVtZV9zZXQodGhlbWVfY2xhc3NpYyhiYXNlX3NpemU9MTIpKQpgYGAKCgojIyBFeGVyY2ljZSAxCgpPbiBjaGVyY2hlIMOgIGV4cGxpcXVlciB1bmUgdmFyaWFibGUgYmluYWlyZSAkWSQgcGFyIGRldXggdmFyaWFibGVzIHF1YW50aXRhdGl2ZXMgJFhfMSQgZXQgJFhfMiQgw6AgbCdhaWRlIGR1IGpldSBkZSBkb25uw6llcyBzdWl2YW50CgpgYGB7cn0KbiA8LSAyMDAwCnNldC5zZWVkKDEyMzQ1KQpYMSA8LSBydW5pZihuKQpzZXQuc2VlZCg1Njc4KQpYMiA8LSBydW5pZihuKQpzZXQuc2VlZCg5MDEyKQpSMSA8LSBYMTw9MC4yNQpSMiA8LSAoWDE+MC4yNSAmIFgyPj0wLjc1KQpSMyA8LSAoWDE+MC4yNSAmIFgyPDAuNzUpClkgPC0gcmVwKDAsbikKWVtSMV0gPC0gcmJpbm9tKHN1bShSMSksMSwwLjI1KQpZW1IyXSA8LSByYmlub20oc3VtKFIyKSwxLDAuMjUpCllbUjNdIDwtIHJiaW5vbShzdW0oUjMpLDEsMC43NSkKZG9ubmVlcyA8LSBkYXRhLmZyYW1lKFgxLFgyLFkpCmRvbm5lZXMkWSA8LSBhcy5mYWN0b3IoZG9ubmVlcyRZKQppbmRhcHAgPC0gMToxNTAwCmRhcHAgPC0gZG9ubmVlc1tpbmRhcHAsXQpkdGVzdCA8LSBkb25uZWVzWy1pbmRhcHAsXQpgYGAKCk9uIHJlbWFycXVlIHF1ZSAkWCQgc3VpdCB1bmUgbG9pIHVuaWZvcm1lIHN1ciBsZSBjYXJyw6kgJFswLDFdXjIkLiAkWXxYPXgkIHN1aXQgdW5lIGxvaSBkZSBCZXJub3VsbGkgZGUgcGFyYW3DqHRyZQogICogMC4yNSBzaSAkeF8xXGxlcSAwLjI1JCBvdSAkeF8xPjAuMjUkIGV0ICR4XzJcZ2VxIDAuNzUkLgogICogMC43NSBzaW5vbi4KICAKT24gZMOpZHVpdCBxdWUgbGEgcsOoZ2xlIGRlIEJheWVzIGVzdCBkb25uw6llIHBhciAKCiQkZ15cc3Rhcih4KT1cbGVmdFx7ClxiZWdpbnthcnJheX17bGx9CjAgJiBcdGV4dHtzaSB9eF8xXGxlcSAwLjI1IFx0ZXh0eyBvdSB9KHhfMT4wLjI1XHRleHR7IGV0IH14XzJcZ2VxIDAuNzUpXFwKMSAmIFx0ZXh0e3Npbm9uLn0KXGVuZHthcnJheX1ccmlnaHQuJCQKCkwnZXJyZXVyIGRlIEJheWVzIHZhdXQgJExeXHN0YXI9MC4yNSQuCgoxLiBSZXByw6lzZW50ZXIgbGUgbnVhZ2UgZGUgcG9pbnRzICRYXzIkIGVuIGZvbmN0aW9uIGRlICRYXzEkIGVuIHV0aWxpc2FudCB1bmUgY291bGV1ciBkaWZmw6lyZW50ZSBzZWxvbiAkWSQuCgpgYGB7cn0KZ2dwbG90KGRvbm5lZXMpK2Flcyh4PVgxLHk9WDIsY29sb3I9WSkrZ2VvbV9wb2ludCgpCmBgYAoKMi4gQ2hhcmdlciBsZSBwYWNrYWdlICpjbGFzcyogZXQgYWp1c3RlciBsYSByw6hnbGUgZGVzIDMgcGx1cyBwcm9jaGVzIHZvaXNpbnMgc3VyIGxlcyBkb25uw6llcyBkJ2FwcHJlbnRpc3NhZ2UgKGZvbmN0aW9uICoqa25uKiopLiBFc3RpbWVyIGxhIHByb2JhYmlsaXTDqSBkJ2VycmV1ciBkZSBjZXR0ZSByw6hnbGUgZW4gdXRpbGlzYW50IGwnw6ljaGFudGlsbG9uIHRlc3QuCgpgYGB7cn0KbGlicmFyeShjbGFzcykKa25uMyA8LSBrbm4oZGFwcFssMToyXSxkdGVzdFssMToyXSxjbD1kYXBwJFksaz0zKQptZWFuKGtubjMhPWR0ZXN0JFkpCmBgYAoKMy4gT24gc291aGFpdGUgbWFpbnRlbmFudCBjaG9pc2lyICRrJCBkYW5zIGxlIHZlY3RldXIKYGBge3J9CmtfY2FuZCA8LSBzZXEoMSwxMDAsYnk9MikKYGBgCkNhbGN1bGVyLCBwb3VyIGNoYXF1ZSB2YWxldXIgZGUgJGskLCBsJ2VycmV1ciBkZSBjbGFzc2lmaWNhdGlvbiBhdmVjIGxhIG3Dqm1lIHRlY2huaXF1ZSBxdWUgZGFucyBsYSBxdWVzdGlvbiBwcsOpY8OpZGVudGUuIFF1ZWxsZSB2YWxldXIgZGUgJGskIGNob2lzaXNzZXogdm91cyA/CgpgYGB7cn0KZXJyZXVyIDwtIHJlcCgwLGxlbmd0aChrX2NhbmQpKQpjb21wdCA8LSAxCmZvciAoayBpbiBrX2NhbmQpewogIGtubl9wcmV2IDwtIGtubihkYXBwWywxOjJdLGR0ZXN0WywxOjJdLGNsPWRhcHAkWSxrPWspCiAgZXJyZXVyW2NvbXB0XSA8LSBtZWFuKGtubl9wcmV2IT1kdGVzdCRZKQogIGNvbXB0IDwtIGNvbXB0KzEKfQpgYGAKT24gY2hvaXNpdCBsYSB2YWxldXIgZGUgJGskIHBvdXIgbGFxdWVsbGUgbCdlcnJldXIgZXN0IGxhIHBsdXMgcGV0aXRlIDoKYGBge3J9CmtfY2FuZFt3aGljaC5taW4oZXJyZXVyKV0KYGBgCgoKNC4gT24gc291aGFpdGUgbWFpbnRlbmFudCBjYWxjdWxlciBsJ2VycmV1ciBkZSBsYSByw6hnbGUgZGVzIDMgcGx1cyBwcm9jaGVzIHZvaXNpbnMgYXZlYyBkZSBsYSB2YWxpZGF0aW9uIGNyb2lzw6llIDEwIGJsb2NzLiBDZXR0ZSBtw6l0aG9kZSBuw6ljZXNzaXRlIGRlIHBhcnRpdGlvbm5lciBsJ8OpY2hhbnRpbGxvbiBlbiAxMCBwYXJ0aWVzLCBvbiBwZXV0IHV0aWxpc2VyIGxhIGZvbmN0aW9uICoqY3JlYXRlRm9sZHMqKiBkdSBwYWNrYWdlICoqY2FyZXQqKi4KCmBgYHtyIG1lc3NhZ2U9RkFMU0UsIHdhcm5pbmc9RkFMU0V9CmxpYnJhcnkoY2FyZXQpCksgPC0gMTAKa2ZvbGRzIDwtIGNyZWF0ZUZvbGRzKDE6bnJvdyhkb25uZWVzKSxrPUspCmBgYAoKT24gY3LDqcOpIGVuc3VpdGUgdW5lIGZvbmN0aW9uIHF1aSBwZXJtZXQgZGUgY2FsY3VsZXIgbCdlcnJldXIgcG91ciB1bmUgdmFsZXVyIGRlICRrJCBkb25uw6llIDoKCmBgYHtyfQplcnJfY3YgPC0gZnVuY3Rpb24oayl7CiAgZXJyZXVyX2Jsb2MgPC0gcmVwKDAsSykKICBmb3IgKGogaW4gMTpLKXsKICAgIHRyYWluIDwtIGRvbm5lZXNbLWtmb2xkc1tbal1dLF0KICAgIHRlc3QgPC0gZG9ubmVlc1trZm9sZHNbW2pdXSxdCiAgICBwcmV2IDwtIGtubih0cmFpblssMToyXSx0ZXN0WywxOjJdLGNsPXRyYWluJFksaz1rKQogICAgZXJyZXVyX2Jsb2Nbal0gPC0gbWVhbihwcmV2IT10ZXN0JFkpCiAgfQogIHJldHVybihtZWFuKGVycmV1cl9ibG9jKSkKfQoKYGBgCgpDYWxjdWxlciwgcG91ciBjaGFxdWUgdmFsZXVyIGRlICRrJCwgbCdlcnJldXIgZGUgY2xhc3NpZmljYXRpb24gYXZlYyBjZXR0ZSB0ZWNobmlxdWUgZGUgdmFsaWRhdGlvbiBjcm9pc8OpZS4gUXVlbGxlIHZhbGV1ciBkZSAkayQgY2hvaXNpc3Nlei12b3VzID8KCmBgYHtyfQplcnJldXJfY3YgPC0gcmVwKDAsbGVuZ3RoKGtfY2FuZCkpCmNvbXB0IDwtIDEKZm9yIChrIGluIGtfY2FuZCl7CiAgZXJyZXVyX2N2W2NvbXB0XSA8LSBlcnJfY3YoaykKICBjb21wdCA8LSBjb21wdCsxCn0Ka19jYW5kW3doaWNoLm1pbihlcnJldXJfY3YpXQpgYGAKCiMjIEV4ZXJjaWNlIDIKCg==</div>
 
 
 </div>

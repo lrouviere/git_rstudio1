@@ -1,5 +1,6 @@
 ---
 title: 'Tuto1 : Estimation du risque'
+author: 'Laurent Rouvière'
 output:
   prettydoc::html_pretty:
     theme: cayman

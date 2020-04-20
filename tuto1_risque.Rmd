@@ -1,5 +1,6 @@
 ---
 title: 'Tuto1 : Estimation du risque'
+author: 'Laurent Rouvière'
 output:
   html_notebook:
 #    css: ~/Dropbox/FICHIERS_STYLE/styles.css
