@@ -6,7 +6,7 @@ title: Cours
 ## Documents de cours
 
 - [cerulean](tuto1_risque.nb.html)
-- [cayman](tuto1_risque_v2.nb.html)
+- [cayman](tuto1_risque_v2.html)
 
 <!--
 - [slides](cepe_classif.pdf)
