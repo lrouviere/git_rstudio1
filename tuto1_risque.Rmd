@@ -88,7 +88,8 @@ for (k in k_cand){
   compt <- compt+1
 }
 ```
-On choisit la valeur de $k$ pour laquelle l'erreur est la plus petite :
+
+> On choisit la valeur de $k$ pour laquelle l'erreur est la plus petite :
 ```{r}
 k_cand[which.min(erreur)]
 ```
