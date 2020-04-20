@@ -1,0 +1,133 @@
+---
+title: 'Tuto1 : Estimation du risque'
+output:
+  html_notebook:
+#    css: ~/Dropbox/FICHIERS_STYLE/styles.css
+    toc: yes
+    toc_float: yes
+    theme: "cerulean"
+#    theme: "cayman"
+  html_document:
+    css: ~/Dropbox/FICHIERS_STYLE/styles.css
+    df_print: paged
+    toc: yes
+---
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+theme_set(theme_classic(base_size=12))
+```
+
+
+## Exercice 1
+
+On cherche à expliquer une variable binaire $Y$ par deux variables quantitatives $X_1$ et $X_2$ à l'aide du jeu de données suivant
+
+```{r}
+n <- 2000
+set.seed(12345)
+X1 <- runif(n)
+set.seed(5678)
+X2 <- runif(n)
+set.seed(9012)
+R1 <- X1<=0.25
+R2 <- (X1>0.25 & X2>=0.75)
+R3 <- (X1>0.25 & X2<0.75)
+Y <- rep(0,n)
+Y[R1] <- rbinom(sum(R1),1,0.25)
+Y[R2] <- rbinom(sum(R2),1,0.25)
+Y[R3] <- rbinom(sum(R3),1,0.75)
+donnees <- data.frame(X1,X2,Y)
+donnees$Y <- as.factor(donnees$Y)
+indapp <- 1:1500
+dapp <- donnees[indapp,]
+dtest <- donnees[-indapp,]
+```
+
+On remarque que $X$ suit une loi uniforme sur le carré $[0,1]^2$. $Y|X=x$ suit une loi de Bernoulli de paramètre
+  * 0.25 si $x_1\leq 0.25$ ou $x_1>0.25$ et $x_2\geq 0.75$.
+  * 0.75 sinon.
+  
+On déduit que la règle de Bayes est donnée par 
+
+$$g^\star(x)=\left\{
+\begin{array}{ll}
+0 & \text{si }x_1\leq 0.25 \text{ ou }(x_1>0.25\text{ et }x_2\geq 0.75)\\
+1 & \text{sinon.}
+\end{array}\right.$$
+
+L'erreur de Bayes vaut $L^\star=0.25$.
+
+1. Représenter le nuage de points $X_2$ en fonction de $X_1$ en utilisant une couleur différente selon $Y$.
+
+```{r}
+ggplot(donnees)+aes(x=X1,y=X2,color=Y)+geom_point()
+```
+
+2. Charger le package *class* et ajuster la règle des 3 plus proches voisins sur les données d'apprentissage (fonction **knn**). Estimer la probabilité d'erreur de cette règle en utilisant l'échantillon test.
+
+```{r}
+library(class)
+knn3 <- knn(dapp[,1:2],dtest[,1:2],cl=dapp$Y,k=3)
+mean(knn3!=dtest$Y)
+```
+
+3. On souhaite maintenant choisir $k$ dans le vecteur
+```{r}
+k_cand <- seq(1,100,by=2)
+```
+Calculer, pour chaque valeur de $k$, l'erreur de classification avec la même technique que dans la question précédente. Quelle valeur de $k$ choisissez vous ?
+
+```{r}
+erreur <- rep(0,length(k_cand))
+compt <- 1
+for (k in k_cand){
+  knn_prev <- knn(dapp[,1:2],dtest[,1:2],cl=dapp$Y,k=k)
+  erreur[compt] <- mean(knn_prev!=dtest$Y)
+  compt <- compt+1
+}
+```
+On choisit la valeur de $k$ pour laquelle l'erreur est la plus petite :
+```{r}
+k_cand[which.min(erreur)]
+```
+
+
+4. On souhaite maintenant calculer l'erreur de la règle des 3 plus proches voisins avec de la validation croisée 10 blocs. Cette méthode nécessite de partitionner l'échantillon en 10 parties, on peut utiliser la fonction **createFolds** du package **caret**.
+
+```{r message=FALSE, warning=FALSE}
+library(caret)
+K <- 10
+kfolds <- createFolds(1:nrow(donnees),k=K)
+```
+
+On créé ensuite une fonction qui permet de calculer l'erreur pour une valeur de $k$ donnée :
+
+```{r}
+err_cv <- function(k){
+  erreur_bloc <- rep(0,K)
+  for (j in 1:K){
+    train <- donnees[-kfolds[[j]],]
+    test <- donnees[kfolds[[j]],]
+    prev <- knn(train[,1:2],test[,1:2],cl=train$Y,k=k)
+    erreur_bloc[j] <- mean(prev!=test$Y)
+  }
+  return(mean(erreur_bloc))
+}
+
+```
+
+Calculer, pour chaque valeur de $k$, l'erreur de classification avec cette technique de validation croisée. Quelle valeur de $k$ choisissez-vous ?
+
+```{r}
+erreur_cv <- rep(0,length(k_cand))
+compt <- 1
+for (k in k_cand){
+  erreur_cv[compt] <- err_cv(k)
+  compt <- compt+1
+}
+k_cand[which.min(erreur_cv)]
+```
+
+## Exercice 2
+

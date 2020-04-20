@@ -5,8 +5,8 @@ title: Cours
 
 ## Documents de cours
 
-- [slides](classif_sup.pdf)
-- [slides au format rapport](cours_article.pdf)
+- [cerulean](tuto1_risque.nb.html)
+- [cayman](tuto1_risque_v2.nb.html)
 
 <!--
 - [slides](cepe_classif.pdf)
