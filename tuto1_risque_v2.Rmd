@@ -43,6 +43,7 @@ dtest <- donnees[-indapp,]
 ```
 
 On remarque que $X$ suit une loi uniforme sur le carré $[0,1]^2$. $Y|X=x$ suit une loi de Bernoulli de paramètre
+
   * 0.25 si $x_1\leq 0.25$ ou $x_1>0.25$ et $x_2\geq 0.75$.
   * 0.75 sinon.
   
@@ -76,6 +77,7 @@ k_cand <- seq(1,100,by=2)
 ```
 Calculer, pour chaque valeur de $k$, l'erreur de classification avec la même technique que dans la question précédente. Quelle valeur de $k$ choisissez vous ?
 
+>
 ```{r}
 erreur <- rep(0,length(k_cand))
 compt <- 1

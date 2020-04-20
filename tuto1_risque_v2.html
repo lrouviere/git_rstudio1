@@ -11,6 +11,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
+<meta name="author" content="Laurent Rouvière" />
 
 
 <title>Tuto1 : Estimation du risque</title>
@@ -136,6 +137,7 @@ code span.ot { color: #007020; }
 
 <section class="page-header">
 <h1 class="title toc-ignore project-name">Tuto1 : Estimation du risque</h1>
+<h4 class="author project-author">Laurent Rouvière</h4>
 </section>
 
 
@@ -164,7 +166,11 @@ code span.ot { color: #007020; }
 <a class="sourceLine" id="cb2-16" data-line-number="16">indapp &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">1500</span></a>
 <a class="sourceLine" id="cb2-17" data-line-number="17">dapp &lt;-<span class="st"> </span>donnees[indapp,]</a>
 <a class="sourceLine" id="cb2-18" data-line-number="18">dtest &lt;-<span class="st"> </span>donnees[<span class="op">-</span>indapp,]</a></code></pre></div>
-<p>On remarque que <span class="math inline">\(X\)</span> suit une loi uniforme sur le carré <span class="math inline">\([0,1]^2\)</span>. <span class="math inline">\(Y|X=x\)</span> suit une loi de Bernoulli de paramètre * 0.25 si <span class="math inline">\(x_1\leq 0.25\)</span> ou <span class="math inline">\(x_1&gt;0.25\)</span> et <span class="math inline">\(x_2\geq 0.75\)</span>. * 0.75 sinon.</p>
+<p>On remarque que <span class="math inline">\(X\)</span> suit une loi uniforme sur le carré <span class="math inline">\([0,1]^2\)</span>. <span class="math inline">\(Y|X=x\)</span> suit une loi de Bernoulli de paramètre</p>
+<ul>
+<li>0.25 si <span class="math inline">\(x_1\leq 0.25\)</span> ou <span class="math inline">\(x_1&gt;0.25\)</span> et <span class="math inline">\(x_2\geq 0.75\)</span>.</li>
+<li>0.75 sinon.</li>
+</ul>
 <p>On déduit que la règle de Bayes est donnée par</p>
 <p><span class="math display">\[g^\star(x)=\left\{
 \begin{array}{ll}
@@ -189,6 +195,9 @@ code span.ot { color: #007020; }
 </ol>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">k_cand &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">1</span>,<span class="dv">100</span>,<span class="dt">by=</span><span class="dv">2</span>)</a></code></pre></div>
 <p>Calculer, pour chaque valeur de <span class="math inline">\(k\)</span>, l’erreur de classification avec la même technique que dans la question précédente. Quelle valeur de <span class="math inline">\(k\)</span> choisissez vous ?</p>
+<blockquote>
+
+</blockquote>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">erreur &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>,<span class="kw">length</span>(k_cand))</a>
 <a class="sourceLine" id="cb7-2" data-line-number="2">compt &lt;-<span class="st"> </span><span class="dv">1</span></a>
 <a class="sourceLine" id="cb7-3" data-line-number="3"><span class="cf">for</span> (k <span class="cf">in</span> k_cand){</a>
