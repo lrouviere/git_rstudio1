@@ -9,6 +9,8 @@ title: Cours
 - [cayman vignette](tuto1_risque_v3.html)
 - [cayman github](tuto1_risque_v4.html)
 - [rmdformats](tuto1_risque_v5.html)
+- [rmdformats bis](essai_rmdformats.html)
+- [vignette kayman](essai.html)
 
 
 <!--
